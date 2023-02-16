@@ -1,5 +1,5 @@
 import React from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import Login from '../Pages/Login'
 
 describe('Login Page', () => {
@@ -15,6 +15,16 @@ describe('Login Page', () => {
 
     const loginElement = screen.getByRole('login')
     expect(loginElement).toBeInTheDocument()
+  })
+
+  // side effect/state test
+  test('checking loading auth', async () => {
+    render(<Login />)
+
+    expect(screen.getByTestId('loading-text')).toHaveTextContent(/checking.../g)
+    await waitFor(() => {
+      expect(screen.getByTestId('loading-text')).toHaveTextContent(/finished/g)
+    })
   })
 
   // event test
